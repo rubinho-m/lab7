@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Ledger>
+    <Tickets>
+        <Ticket>
+            <name>Name</name>
+            <coordinates>
+                <x>1.0</x>
+                <y>1</y>
+            </coordinates>
+            <price>100.0</price>
+            <comment>co</comment>
+            <refundable>true</refundable>
+        </Ticket>
+    </Tickets>
+</Ledger>
