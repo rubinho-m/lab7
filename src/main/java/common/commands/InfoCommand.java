@@ -10,6 +10,9 @@ package common.commands;
 import common.networkStructures.Response;
 import server.collectionManagement.CollectionManager;
 
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 public class InfoCommand extends CommandTemplate implements CommandWithResponse {
     private StringBuilder output;
     public InfoCommand(CollectionManager collectionManager) {

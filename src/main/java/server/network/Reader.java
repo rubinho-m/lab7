@@ -19,6 +19,8 @@ import java.net.SocketTimeoutException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class Reader {
     private ServerSocket serverSocket;
@@ -49,8 +51,6 @@ public class Reader {
 //                System.out.println(clientSocket.getPort() + " " + clientSocket.getLocalPort());
                 ports.add(clientSocket.getPort());
                 unique_ports.add(clientSocket.getPort());
-                System.out.println(ports.size());
-                System.out.println(unique_ports.size());
 
                 logger.info("GOT CLIENT SOCKET");
                 logger.info("New client connected: " + clientSocket.getInetAddress().getHostAddress());

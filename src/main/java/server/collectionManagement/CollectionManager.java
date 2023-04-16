@@ -17,7 +17,7 @@ import java.util.Set;
 public class CollectionManager {
     @XmlElementWrapper(name = "Tickets")
     @XmlElement(name = "Ticket")
-    private Set<Ticket> tickets = new LinkedHashSet<>();
+    private volatile Set<Ticket> tickets = new LinkedHashSet<>();
 
     public String getPath() {
         return path;
@@ -27,7 +27,7 @@ public class CollectionManager {
         CollectionManager.path = path;
     }
 
-    private static String path;
+    private volatile static String path;
 
     public void setCollection(Set<Ticket> data) {
         for (Ticket ticket : data) {
@@ -82,6 +82,7 @@ public class CollectionManager {
     }
 
     public Ticket getFirstElement() {
+
         return (Ticket) tickets.toArray()[0];
     }
 

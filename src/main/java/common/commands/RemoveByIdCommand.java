@@ -12,6 +12,8 @@ import common.networkStructures.Response;
 import common.structureClasses.Ticket;
 import server.collectionManagement.CollectionManager;
 
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 public class RemoveByIdCommand extends CommandTemplate implements CommandWithResponse{
     private String output;
     public RemoveByIdCommand(CollectionManager collectionManager) {

@@ -9,6 +9,9 @@ package common.commands;
 
 import common.networkStructures.Response;
 import server.collectionManagement.CollectionManager;
+
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 public class AddCommand extends CommandTemplate implements CommandWithResponse {
     public AddCommand(CollectionManager collectionManager) {
         super(collectionManager);
@@ -16,7 +19,10 @@ public class AddCommand extends CommandTemplate implements CommandWithResponse {
 
     @Override
     public void execute() {
+//        ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+//        lock.writeLock().lock();
         getCollectionManager().addToCollection(getTicket());
+//        lock.writeLock().unlock();
     }
 
     @Override

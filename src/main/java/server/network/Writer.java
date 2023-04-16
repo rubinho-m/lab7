@@ -9,6 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -24,7 +25,9 @@ public class Writer {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
         objectOutputStream.writeObject(response);
+
         byte[] newArray = byteArrayOutputStream.toByteArray();
+
 
         ExecutorService executorService = Executors.newCachedThreadPool();
         executorService.submit(() -> {
@@ -34,6 +37,7 @@ public class Writer {
                 logger.info("RESPONSE HAS BEEN SENT");
                 objectOutputStream.close();
                 byteArrayOutputStream.close();
+                outputStream.close();
             } catch (IOException e) {
                 logger.error("Failed to send response: " + e.getMessage());
             }

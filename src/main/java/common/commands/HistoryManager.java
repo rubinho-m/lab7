@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryManager {
-    private static List<String> historyCommands = new ArrayList<>();
+    private static volatile List<String> historyCommands = new ArrayList<>();
 
     public static List<String> getHistoryCommands() {
         return historyCommands;

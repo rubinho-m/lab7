@@ -14,6 +14,7 @@ import server.collectionManagement.CollectionManager;
 
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class UpdateCommand extends CommandTemplate implements CommandWithResponse{
     private String output = null;
@@ -39,6 +40,7 @@ public class UpdateCommand extends CommandTemplate implements CommandWithRespons
         Ticket.setLastId((long) Integer.parseInt(getArg()) - 1);
         collectionManager.addToCollection(newTicket);
         Ticket.setLastId(tmpId);
+
     }
 
     @Override

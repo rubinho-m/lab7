@@ -15,27 +15,27 @@ public class Venue implements Comparable<Venue>, Serializable {
     /**
      * The id of the venue
      */
-    private Integer id;
+    private volatile Integer id;
     /**
      * The name of the venue
      */
     @XmlElement(name = "name")
-    private String name;
+    private volatile String name;
     /**
      * The capacity of the venue
      */
     @XmlElement(name = "capacity")
-    private long capacity;
+    private volatile long capacity;
     /**
      * The type of the venue
      */
     @XmlElement(name = "type")
-    private VenueType type;
+    private volatile VenueType type;
     /**
      * The address of the venue
      */
     @XmlElement(name = "address")
-    private Address address;
+    private volatile Address address;
 
     /**
      * Gets the id of the venue

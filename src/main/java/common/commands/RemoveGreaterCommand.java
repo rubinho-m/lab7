@@ -14,6 +14,7 @@ import server.collectionManagement.CollectionManager;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
 public class RemoveGreaterCommand extends CommandTemplate implements CommandWithResponse {

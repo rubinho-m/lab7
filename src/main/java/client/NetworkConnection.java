@@ -9,6 +9,7 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
+import java.nio.LongBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
@@ -71,11 +72,18 @@ public class NetworkConnection {
                     ByteBuffer buf = ByteBuffer.wrap(data);
                     buf.clear();
                     socketChannel.read(buf);
-                    ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data);
+
+
+                    ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(buf.array());
                     ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
-                    Response response = (Response) objectInputStream.readObject();
-                    returnResponse = response;
-                    System.out.println(response.getOutput());
+
+                    try {
+                        Response response = (Response) objectInputStream.readObject();
+//                        returnResponse = response;
+                        System.out.println(response.getOutput());
+                    } catch (java.io.EOFException e){
+                        System.out.println("Слишком большие данные для маленького клиента");
+                    }
                     buf.clear();
                     byteArrayInputStream.close();
                     objectInputStream.close();

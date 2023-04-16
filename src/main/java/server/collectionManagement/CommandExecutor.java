@@ -11,13 +11,17 @@ import common.exceptions.WrongScriptException;
 import common.networkStructures.Response;
 import common.structureClasses.Ticket;
 
+import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import static java.lang.Thread.sleep;
+
 public class CommandExecutor {
     private static final HashMap<String, CommandWithResponse> commandMap = new HashMap<>();
     private Set<String> paths = new HashSet<>();
+    ReadWriteLock lock = new ReentrantReadWriteLock();
 
     public Set<String> getPaths() {
         return paths;
@@ -42,6 +46,29 @@ public class CommandExecutor {
         add("remove_greater");
     }};
 
+    private final Set<String> writeLockCommands = new HashSet<>() {{
+        add("add");
+        add("update");
+        add("remove_greater");
+        add("remove_by_id");
+        add("add_if_min");
+        add("clear");
+        add("filter_greater_than_price");
+
+
+    }};
+
+    private final Set<String> readLockCommands = new HashSet<>() {{
+        add("info");
+        add("show");
+        add("history");
+        add("help");
+        add("min_by_price");
+        add("print_field_descending_venue");
+
+
+    }};
+
     public void setCommands(CollectionManager collectionManager) {
         commandMap.put("save", new SaveCommand(collectionManager));
         commandMap.put("add", new AddCommand(collectionManager));
@@ -64,10 +91,17 @@ public class CommandExecutor {
     public Response execute(ParsedString<ArrayList<String>, Ticket> parsedString) throws Exception {
 
         try {
-            ReadWriteLock lock = new ReentrantReadWriteLock();
-            lock.readLock().lock();
+
             ArrayList<String> commandWithArgs = parsedString.getArray();
             CommandWithResponse command = commandMap.get(commandWithArgs.get(0));
+            if (writeLockCommands.contains(commandWithArgs.get(0)))
+            {
+                System.out.println("write");
+                lock.writeLock().lock();
+            } else if (readLockCommands.contains(commandWithArgs.get(0))) {
+                System.out.println("read");
+                lock.readLock().lock();
+            }
             if (command == null) {
                 throw new IllegalStateException("No command registered for " + commandWithArgs.get(0));
             }
@@ -88,7 +122,12 @@ public class CommandExecutor {
                 Response response = command.getCommandResponse();
                 return response;
             } finally {
-                lock.readLock().unlock();
+                if (writeLockCommands.contains(commandWithArgs.get(0)))
+                {
+                    lock.writeLock().unlock();
+                } else if (readLockCommands.contains(commandWithArgs.get(0))){
+                    lock.readLock().unlock();
+                }
             }
 
         } catch (WrongScriptException e) {

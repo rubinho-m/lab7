@@ -24,10 +24,11 @@ public class CommandParser {
         String line = scanner.nextLine();
         ArrayList<String> lineArr = new ArrayList<>(Arrays.asList(line.split(" ")));
         hasWrongCommand = true;
-        hasWrongFormat = false;
+        hasWrongFormat = false;;
         handleCommand(lineArr);
         if (hasWrongCommand){
             if (!isServer) {
+                System.out.println(lineArr.get(0));
                 throw new NoCommandException("Нет такой команды");
             }
         }

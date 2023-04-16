@@ -10,6 +10,8 @@ package common.commands;
 import common.networkStructures.Response;
 import server.collectionManagement.CollectionManager;
 
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 public class ClearCommand extends CommandTemplate implements CommandWithResponse{
     private StringBuilder output;
     public ClearCommand(CollectionManager collectionManager){

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class AddIfMinCommand extends CommandTemplate implements CommandWithResponse{
     public AddIfMinCommand(CollectionManager collectionManager) {
