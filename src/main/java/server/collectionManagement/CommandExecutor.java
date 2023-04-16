@@ -61,10 +61,11 @@ public class CommandExecutor {
 //        commandMap.put("execute_script", new ExecuteScriptCommand(collectionManager));
     }
 
-    public synchronized Response execute(ParsedString<ArrayList<String>, Ticket> parsedString) throws Exception {
-//        ReadWriteLock lock = new ReentrantReadWriteLock();
-//        lock.readLock().lock();
+    public Response execute(ParsedString<ArrayList<String>, Ticket> parsedString) throws Exception {
+
         try {
+            ReadWriteLock lock = new ReentrantReadWriteLock();
+            lock.readLock().lock();
             ArrayList<String> commandWithArgs = parsedString.getArray();
             CommandWithResponse command = commandMap.get(commandWithArgs.get(0));
             if (command == null) {
@@ -76,25 +77,20 @@ public class CommandExecutor {
             }
             Ticket inputTicket = parsedString.getTicket(); // для команд с коллекцией
 
-//            lock.readLock().unlock();
-//            lock.writeLock().lock();
 
-            try {
-                command.setArg(arg);
-                command.setTicket(inputTicket);
-                HistoryManager.addToHistory(commandWithArgs.get(0));
-                command.execute();
-            } finally {
-//                lock.writeLock().unlock();
-            }
+            command.setArg(arg);
+            command.setTicket(inputTicket);
+            HistoryManager.addToHistory(commandWithArgs.get(0));
+            command.execute();
 
-//            lock.readLock().lock();
+
             try {
                 Response response = command.getCommandResponse();
                 return response;
             } finally {
-//                lock.readLock().unlock();
+                lock.readLock().unlock();
             }
+
         } catch (WrongScriptException e) {
             System.out.println(e.getMessage());
             return new Response("Wrong script");
