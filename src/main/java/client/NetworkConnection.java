@@ -22,17 +22,19 @@ public class NetworkConnection {
     int port;
     SocketAddress socketAddress;
     SocketChannel socketChannel;
+    Selector selector;
 
-    public NetworkConnection(String address, int port) throws UnknownHostException {
+    public NetworkConnection(String address, int port) throws IOException {
         host = InetAddress.getByName(address);
         this.socketAddress = new InetSocketAddress(host, port);
+        selector = Selector.open();
     }
 
     public void connectionManage(Request request) throws Exception {
 
-        Selector selector = Selector.open();
         socketChannel = SocketChannel.open();
         socketChannel.configureBlocking(false);
+        socketChannel.socket().setSoLinger(true, 0);
         socketChannel.connect(socketAddress);
         socketChannel.register(selector, SelectionKey.OP_CONNECT);
 
@@ -78,6 +80,7 @@ public class NetworkConnection {
                     byteArrayInputStream.close();
                     objectInputStream.close();
                     socketChannel.close();
+
                     break loop;
 
                 }

@@ -17,6 +17,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Reader {
     private ServerSocket serverSocket;
@@ -34,29 +36,51 @@ public class Reader {
     }
 
     public void read() throws Exception {
-        serverSocket.setSoTimeout(500);
+        serverSocket.setSoTimeout(1000);
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        List<Integer> ports = new ArrayList<>();
+        Set<Integer> unique_ports = new HashSet<>();
+
+
+
         while (true) {
             try {
                 Socket clientSocket = serverSocket.accept();
+//                System.out.println(clientSocket.getPort() + " " + clientSocket.getLocalPort());
+                ports.add(clientSocket.getPort());
+                unique_ports.add(clientSocket.getPort());
+                System.out.println(ports.size());
+                System.out.println(unique_ports.size());
+
+                logger.info("GOT CLIENT SOCKET");
                 logger.info("New client connected: " + clientSocket.getInetAddress().getHostAddress());
+                logger.info("READY TO READ");
 
-                try (InputStream inputStream = clientSocket.getInputStream();
-                     OutputStream outputStream = clientSocket.getOutputStream();
-                     ObjectInputStream objectInputStream = new ObjectInputStream(inputStream)) {
+                executorService.submit(() -> {
+                    try (InputStream inputStream = clientSocket.getInputStream();
+                         OutputStream outputStream = clientSocket.getOutputStream();
+                         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream)) {
 
-                    while (true) {
-                        Request request = (Request) objectInputStream.readObject();
-                        ArrayList<String> commandWithArguments = request.getCommandWithArguments();
-                        Ticket ticket = (Ticket) request.getTicket();
-                        ParsedString<ArrayList<String>, Ticket> parsedString = new ParsedString<>(commandWithArguments, ticket);
-                        logger.info("REQUEST HAS BEEN PARSED");
+                        while (true) {
+                            Request request = (Request) objectInputStream.readObject();
+                            ArrayList<String> commandWithArguments = request.getCommandWithArguments();
+                            Ticket ticket = (Ticket) request.getTicket();
+                            ParsedString<ArrayList<String>, Ticket> parsedString = new ParsedString<>(commandWithArguments, ticket);
+                            logger.info("REQUEST HAS BEEN PARSED");
 
-                        Handler handler = new Handler(commandExecutor, outputStream, false);
-                        handler.handleCommand(parsedString);
+                            Handler handler = new Handler(commandExecutor, outputStream, false);
+                            handler.handleCommand(parsedString);
+                        }
+                    } catch (Exception e) {
+                        logger.info("Client disconnected");
+                        try {
+                            clientSocket.close();
+                            logger.info("CLIENT CONNECTION CLOSED");
+                        } catch (IOException ex) {
+                            logger.error("Failed to close client socket: " + ex.getMessage());
+                        }
                     }
-                } catch (Exception e) {
-                    logger.info("Client disconnected: " + e.getMessage());
-                }
+                });
             } catch (SocketTimeoutException e) {
                 try {
                     SignalHandler signalHandler = signal -> {

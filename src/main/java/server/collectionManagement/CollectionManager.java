@@ -77,6 +77,10 @@ public class CollectionManager {
         tickets.add(ticket);
     }
 
+    public void resetId(){
+        Ticket.setLastId(0L);
+    }
+
     public Ticket getFirstElement() {
         return (Ticket) tickets.toArray()[0];
     }

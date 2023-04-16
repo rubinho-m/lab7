@@ -18,6 +18,7 @@ public class ClearCommand extends CommandTemplate implements CommandWithResponse
     @Override
     public void execute() {
         getCollectionManager().getCollection().clear();
+        getCollectionManager().resetId();
         output = new StringBuilder();
         output.append("Now collection is empty");
     }

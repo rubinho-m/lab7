@@ -12,6 +12,8 @@ import common.networkStructures.Response;
 import common.structureClasses.Ticket;
 
 import java.util.*;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class CommandExecutor {
     private static final HashMap<String, CommandWithResponse> commandMap = new HashMap<>();
@@ -59,8 +61,9 @@ public class CommandExecutor {
 //        commandMap.put("execute_script", new ExecuteScriptCommand(collectionManager));
     }
 
-    public Response execute(ParsedString<ArrayList<String>, Ticket> parsedString) throws Exception {
-
+    public synchronized Response execute(ParsedString<ArrayList<String>, Ticket> parsedString) throws Exception {
+//        ReadWriteLock lock = new ReentrantReadWriteLock();
+//        lock.readLock().lock();
         try {
             ArrayList<String> commandWithArgs = parsedString.getArray();
             CommandWithResponse command = commandMap.get(commandWithArgs.get(0));
@@ -72,16 +75,26 @@ public class CommandExecutor {
                 arg = commandWithArgs.get(1);
             }
             Ticket inputTicket = parsedString.getTicket(); // для команд с коллекцией
-//            if (collectionCommands.contains(commandWithArgs.get(0))) {
-//                CollectionInput collectionInput = new CollectionInput(scanner, isFile);
-//                inputTicket = collectionInput.getCollection();
-//            }
-            command.setArg(arg);
-            command.setTicket(inputTicket);
-            HistoryManager.addToHistory(commandWithArgs.get(0));
-            command.execute();
-            Response response = command.getCommandResponse();
-            return response;
+
+//            lock.readLock().unlock();
+//            lock.writeLock().lock();
+
+            try {
+                command.setArg(arg);
+                command.setTicket(inputTicket);
+                HistoryManager.addToHistory(commandWithArgs.get(0));
+                command.execute();
+            } finally {
+//                lock.writeLock().unlock();
+            }
+
+//            lock.readLock().lock();
+            try {
+                Response response = command.getCommandResponse();
+                return response;
+            } finally {
+//                lock.readLock().unlock();
+            }
         } catch (WrongScriptException e) {
             System.out.println(e.getMessage());
             return new Response("Wrong script");

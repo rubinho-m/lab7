@@ -16,6 +16,7 @@ import common.exceptions.XMLTroubleException;
 import common.commandParsing.CommandParser;
 
 import java.io.IOException;
+import java.net.BindException;
 import java.net.ConnectException;
 import java.net.UnknownHostException;
 import java.util.*;
@@ -73,6 +74,7 @@ public class Client {
                 } catch (ConnectException e) {
                     System.out.println("Сервер временно недоступен");
                 } catch (IOException e){
+                    System.out.println(e);
                     System.out.println("Сервер разорвал подключение");
                     System.exit(1);
                 }
