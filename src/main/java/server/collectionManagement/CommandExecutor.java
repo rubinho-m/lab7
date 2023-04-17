@@ -21,6 +21,7 @@ import static java.lang.Thread.sleep;
 public class CommandExecutor {
     private static final HashMap<String, CommandWithResponse> commandMap = new HashMap<>();
     private Set<String> paths = new HashSet<>();
+    private int BUFFER_SIZE = 512 * 512;
     ReadWriteLock lock = new ReentrantReadWriteLock();
 
     public Set<String> getPaths() {
@@ -118,6 +119,12 @@ public class CommandExecutor {
 
             try {
                 Response response = command.getCommandResponse();
+                String output = response.getOutput();
+                byte[] outputBytes = output.getBytes();
+                if (outputBytes.length > BUFFER_SIZE){
+                    String newOutput = new String(outputBytes, 0, BUFFER_SIZE);
+                    response.setOutput(newOutput);
+                }
                 return response;
             } finally {
                 if (writeLockCommands.contains(commandWithArgs.get(0)))

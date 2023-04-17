@@ -29,12 +29,20 @@ public class Writer {
         objectOutputStream.writeObject(response);
         byte[] newArray = byteArrayOutputStream.toByteArray();
 
+//        ObjectOutputStream serverOutput = new ObjectOutputStream(outputStream);
+
         ExecutorService executorService = Executors.newCachedThreadPool();
         executorService.submit(() -> {
             try {
                 outputStream.write(newArray);
                 outputStream.flush();
+
+//                serverOutput.writeObject(response);
+//                serverOutput.flush();
                 logger.info("RESPONSE HAS BEEN SENT");
+//                serverOutput.close();
+//                outputStream.close();
+
                 objectOutputStream.close();
                 byteArrayOutputStream.close();
                 outputStream.close();

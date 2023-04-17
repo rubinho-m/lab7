@@ -74,10 +74,12 @@ public class NetworkConnection {
                     socketChannel.read(buf);
 
 
-                    ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(buf.array());
+
+                    ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data);
                     ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
 
                     try {
+
                         Response response = (Response) objectInputStream.readObject();
 //                        returnResponse = response;
                         System.out.println(response.getOutput());
