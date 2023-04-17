@@ -74,7 +74,6 @@ public class Client {
                 } catch (ConnectException e) {
                     System.out.println("Сервер временно недоступен");
                 } catch (IOException e){
-                    System.out.println(e);
                     System.out.println("Сервер разорвал подключение");
                     System.exit(1);
                 }

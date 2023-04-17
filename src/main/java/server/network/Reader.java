@@ -38,19 +38,14 @@ public class Reader {
     }
 
     public void read() throws Exception {
-        serverSocket.setSoTimeout(1000);
+//        serverSocket.setSoTimeout(1000);
         ExecutorService executorService = Executors.newCachedThreadPool();
-        List<Integer> ports = new ArrayList<>();
-        Set<Integer> unique_ports = new HashSet<>();
-
 
 
         while (true) {
             try {
                 Socket clientSocket = serverSocket.accept();
 //                System.out.println(clientSocket.getPort() + " " + clientSocket.getLocalPort());
-                ports.add(clientSocket.getPort());
-                unique_ports.add(clientSocket.getPort());
 
                 logger.info("GOT CLIENT SOCKET");
                 logger.info("New client connected: " + clientSocket.getInetAddress().getHostAddress());
@@ -81,36 +76,38 @@ public class Reader {
                         }
                     }
                 });
-            } catch (SocketTimeoutException e) {
-                try {
-                    SignalHandler signalHandler = signal -> {
-                        if (signal.getName().equals("INT")) {
-                            System.exit(0);
-                        }
-                    };
 
-                    Signal.handle(new Signal("INT"), signalHandler);
-
-
-                    Scanner scanner = new Scanner(System.in);
-                    if (System.in.available() > 0) {
-                        CommandParser commandParser = new CommandParser();
-                        ParsedString<ArrayList<String>, Ticket> parsedString = commandParser.readCommand(scanner, true, true);
-                        if (serverCommands.contains(parsedString.getArray().get(0))) {
-                            Handler handler = new Handler(commandExecutor, true);
-                            handler.handleCommand(parsedString);
-                        } else {
-                            System.out.println("Нет такой команды");
-                            logger.info("NOT SERVER COMMAND");
-                        }
-                    }
-
-                } catch (NoCommandException | WrongCommandFormat ignored) {
-                    logger.error("WRONG COMMAND HAS BEEN INPUT");
-
-                } catch (NoSuchElementException el) {
-                    System.exit(0);
-                }
+            }
+            catch (SocketTimeoutException e) {
+//                try {
+//                    SignalHandler signalHandler = signal -> {
+//                        if (signal.getName().equals("INT")) {
+//                            System.exit(0);
+//                        }
+//                    };
+//
+//                    Signal.handle(new Signal("INT"), signalHandler);
+//
+//
+//                    Scanner scanner = new Scanner(System.in);
+//                    if (System.in.available() > 0) {
+//                        CommandParser commandParser = new CommandParser();
+//                        ParsedString<ArrayList<String>, Ticket> parsedString = commandParser.readCommand(scanner, true, true);
+//                        if (serverCommands.contains(parsedString.getArray().get(0))) {
+//                            Handler handler = new Handler(commandExecutor, true);
+//                            handler.handleCommand(parsedString);
+//                        } else {
+//                            System.out.println("Нет такой команды");
+//                            logger.info("NOT SERVER COMMAND");
+//                        }
+//                    }
+//
+//                } catch (NoCommandException | WrongCommandFormat ignored) {
+//                    logger.error("WRONG COMMAND HAS BEEN INPUT");
+//
+//                } catch (NoSuchElementException el) {
+//                    System.exit(0);
+//                }
             }
 
 

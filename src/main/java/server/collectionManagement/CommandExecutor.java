@@ -96,10 +96,8 @@ public class CommandExecutor {
             CommandWithResponse command = commandMap.get(commandWithArgs.get(0));
             if (writeLockCommands.contains(commandWithArgs.get(0)))
             {
-                System.out.println("write");
                 lock.writeLock().lock();
             } else if (readLockCommands.contains(commandWithArgs.get(0))) {
-                System.out.println("read");
                 lock.readLock().lock();
             }
             if (command == null) {
