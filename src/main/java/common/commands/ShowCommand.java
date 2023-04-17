@@ -28,9 +28,11 @@ public class ShowCommand extends CommandTemplate implements CommandWithResponse{
             output = getCollectionManager().printCollection();
             byte[] outputBytes = output.toString().getBytes();
             int n = BUFFER_SIZE;
+            int step = 0;
             while (outputBytes.length > BUFFER_SIZE){
+                step++;
                 n = n / 2;
-                output = getCollectionManager().printCollection(n);
+                output = getCollectionManager().printCollection(n, step);
                 outputBytes = output.toString().getBytes();
             }
         }

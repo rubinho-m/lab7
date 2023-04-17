@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @XmlRootElement(name = "Ledger")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -101,18 +102,30 @@ public class CollectionManager {
         return output;
     }
 
-    public StringBuilder printCollection(int n) {
+    public StringBuilder printCollection(int n, int step) {
+        System.out.println("Вот мы и тут");
         StringBuilder output = new StringBuilder();
         if (tickets.size() == 0) {
             output.append("Collection is empty" + "\n");
         } else {
             output.append("Collection:" + "\n");
         }
-        tickets.stream()
-                .limit(n)
-                .sorted(Comparator.comparing(Ticket::getCoordinates))
-                .map(ticket -> ticket + "\n" + "\n")
-                .forEach(output::append);
+        if (step != 1){
+            tickets.stream()
+                    .limit(n)
+                    .map(ticket -> ticket + "\n" + "\n")
+                    .forEach(output::append);
+        } else {
+            tickets.stream()
+                    .sorted(Comparator.comparing(Ticket::getId).reversed())
+                    .limit(n)
+                    .map(ticket -> ticket + "\n" + "\n")
+                    .forEach(output::append);
+            tickets = tickets.stream()
+                    .sorted(Comparator.comparing(Ticket::getId).reversed())
+                    .limit(n)
+                    .collect(Collectors.toSet());
+        }
 
         return output;
     }

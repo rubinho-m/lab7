@@ -9,7 +9,12 @@ import java.util.ArrayList;
 public class Request implements Serializable {
     private ArrayList<String> commandWithArguments;
     private Serializable ticket;
+    private ArrayList<String> userData;
     private InetAddress host;
+
+    public ArrayList<String> getUserData() {
+        return userData;
+    }
 
     public ArrayList<String> getCommandWithArguments() {
         return commandWithArguments;
@@ -27,14 +32,14 @@ public class Request implements Serializable {
         this.ticket = ticket;
     }
 
-    public Request(ArrayList<String> commandWithArguments, Serializable ticket, InetAddress host) {
+    public Request(ArrayList<String> commandWithArguments, ArrayList<String> userData) {
         this.commandWithArguments = commandWithArguments;
-        this.ticket = ticket;
-        this.host = host;
+        this.userData = userData;
     }
-    public Request(ArrayList<String> commandWithArguments, Serializable ticket) {
+    public Request(ArrayList<String> commandWithArguments, Serializable ticket, ArrayList<String> userData) {
         this.commandWithArguments = commandWithArguments;
         this.ticket = ticket;
+        this.userData = userData;
     }
 
     public InetAddress getHost() {

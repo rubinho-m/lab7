@@ -41,6 +41,19 @@ public class Client {
             CommandParser commandParser = new CommandParser();
             NetworkConnection networkConnection = new NetworkConnection(args[0], port);
 
+            Authentication authentication = new Authentication();
+            authentication.chooseFunction();
+
+            String login = authentication.getLogin();
+            String password = authentication.getPassword();
+            ArrayList<String> userData = new ArrayList<>();
+            userData.add(login);
+            userData.add(password);
+
+            Request authRequest = authentication.getRequest();
+
+            networkConnection.connectionManage(authRequest);
+
             while (true) {
                 try {
                     ParsedString<ArrayList<String>, Ticket> parsedString = commandParser.readCommand(scanner, false, false);
@@ -66,7 +79,7 @@ public class Client {
                     firstToDoCommands.removeAll(Collections.singleton(null));
 
                     for (ParsedString<ArrayList<String>, Ticket> ps : firstToDoCommands) {
-                        Request request = new Request(ps.getArray(), ps.getTicket());
+                        Request request = new Request(ps.getArray(), ps.getTicket(), userData);
                         networkConnection.connectionManage(request);
                     }
                 } catch (NoCommandException | WrongCommandFormat ignored) {

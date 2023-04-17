@@ -5,6 +5,7 @@ import common.dataStructures.ParsedString;
 import common.exceptions.NoCommandException;
 import common.exceptions.WrongCommandFormat;
 import common.networkStructures.Request;
+import common.networkStructures.Response;
 import common.structureClasses.Ticket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -59,12 +60,29 @@ public class Reader {
                         while (true) {
                             Request request = (Request) objectInputStream.readObject();
                             ArrayList<String> commandWithArguments = request.getCommandWithArguments();
-                            Ticket ticket = (Ticket) request.getTicket();
-                            ParsedString<ArrayList<String>, Ticket> parsedString = new ParsedString<>(commandWithArguments, ticket);
-                            logger.info("REQUEST HAS BEEN PARSED");
 
-                            Handler handler = new Handler(commandExecutor, outputStream, false);
-                            handler.handleCommand(parsedString);
+                            if (commandWithArguments.get(0).equals("reg") | commandWithArguments.get(0).equals("auth")){
+                                ArrayList<String> userData = request.getUserData();
+                                String type;
+                                if (commandWithArguments.get(0).equals("reg")){
+                                    type = "Регистрация";
+                                } else {
+                                    type = "Авторизация";
+                                }
+                                Writer writer = new Writer(outputStream);
+                                Response response = new Response(type + " прошла успешно");
+                                writer.write(response);
+                                System.out.println(userData.get(0) + " " + userData.get(1));
+                            } else {
+                                Ticket ticket = (Ticket) request.getTicket();
+                                ArrayList<String> userData = request.getUserData();
+                                System.out.println(userData.get(0) + " " + userData.get(1));
+                                ParsedString<ArrayList<String>, Ticket> parsedString = new ParsedString<>(commandWithArguments, ticket);
+                                logger.info("REQUEST HAS BEEN PARSED");
+
+                                Handler handler = new Handler(commandExecutor, outputStream, false);
+                                handler.handleCommand(parsedString);
+                            }
                         }
                     } catch (Exception e) {
                         logger.info("Client disconnected");
@@ -77,38 +95,10 @@ public class Reader {
                     }
                 });
 
+            } catch (Exception ignored){
+
             }
-            catch (SocketTimeoutException e) {
-//                try {
-//                    SignalHandler signalHandler = signal -> {
-//                        if (signal.getName().equals("INT")) {
-//                            System.exit(0);
-//                        }
-//                    };
-//
-//                    Signal.handle(new Signal("INT"), signalHandler);
-//
-//
-//                    Scanner scanner = new Scanner(System.in);
-//                    if (System.in.available() > 0) {
-//                        CommandParser commandParser = new CommandParser();
-//                        ParsedString<ArrayList<String>, Ticket> parsedString = commandParser.readCommand(scanner, true, true);
-//                        if (serverCommands.contains(parsedString.getArray().get(0))) {
-//                            Handler handler = new Handler(commandExecutor, true);
-//                            handler.handleCommand(parsedString);
-//                        } else {
-//                            System.out.println("Нет такой команды");
-//                            logger.info("NOT SERVER COMMAND");
-//                        }
-//                    }
-//
-//                } catch (NoCommandException | WrongCommandFormat ignored) {
-//                    logger.error("WRONG COMMAND HAS BEEN INPUT");
-//
-//                } catch (NoSuchElementException el) {
-//                    System.exit(0);
-//                }
-            }
+
 
 
         }
