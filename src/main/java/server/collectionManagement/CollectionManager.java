@@ -101,5 +101,21 @@ public class CollectionManager {
         return output;
     }
 
+    public StringBuilder printCollection(int n) {
+        StringBuilder output = new StringBuilder();
+        if (tickets.size() == 0) {
+            output.append("Collection is empty" + "\n");
+        } else {
+            output.append("Collection:" + "\n");
+        }
+        tickets.stream()
+                .limit(n)
+                .sorted(Comparator.comparing(Ticket::getCoordinates))
+                .map(ticket -> ticket + "\n" + "\n")
+                .forEach(output::append);
+
+        return output;
+    }
+
 
 }

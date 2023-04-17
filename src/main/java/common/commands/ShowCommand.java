@@ -13,6 +13,7 @@ import common.exceptions.EmptyCollectionException;
 
 public class ShowCommand extends CommandTemplate implements CommandWithResponse{
     private StringBuilder output;
+    private int BUFFER_SIZE = 512 * 512;
     private StringBuilder outputCollection;
     public ShowCommand(CollectionManager collectionManager) {
         super(collectionManager);
@@ -25,6 +26,13 @@ public class ShowCommand extends CommandTemplate implements CommandWithResponse{
             output.append("Collection is empty, please add ticket");
         } else {
             output = getCollectionManager().printCollection();
+            byte[] outputBytes = output.toString().getBytes();
+            int n = BUFFER_SIZE;
+            while (outputBytes.length > BUFFER_SIZE){
+                n = n / 2;
+                output = getCollectionManager().printCollection(n);
+                outputBytes = output.toString().getBytes();
+            }
         }
     }
 
