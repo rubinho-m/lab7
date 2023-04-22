@@ -3,6 +3,8 @@ package client;
 import common.networkStructures.Request;
 
 import java.io.Console;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
@@ -44,12 +46,30 @@ public class Authentication {
 
     public void readPassword(Scanner scanner) {
         Console console = System.console();
+        String insecurePassword;
 
         if (console != null) {
-            password = String.valueOf(console.readPassword());
+            insecurePassword = String.valueOf(console.readPassword());
         } else {
-            password = scanner.nextLine();
+            insecurePassword = scanner.nextLine();
         }
+        password = encodePassword(insecurePassword);
+    }
+    public String encodePassword(String insecurePassword){
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
+            byte[] hashedBytes = messageDigest.digest(insecurePassword.getBytes());
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashedBytes) {
+                sb.append(String.format("%02x", b));
+            }
+
+            return sb.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 
     public void readLogin(Scanner scanner){

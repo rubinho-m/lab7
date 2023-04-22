@@ -103,7 +103,6 @@ public class CollectionManager {
     }
 
     public StringBuilder printCollection(int n, int step) {
-        System.out.println("Вот мы и тут");
         StringBuilder output = new StringBuilder();
         if (tickets.size() == 0) {
             output.append("Collection is empty" + "\n");
