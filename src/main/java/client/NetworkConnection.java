@@ -7,18 +7,20 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
-import java.nio.LongBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
+import java.util.Collections;
 import java.util.Iterator;
 
 public class NetworkConnection {
     private final int BUFFER_SIZE = 1024 * 1024;
     private InetAddress host;
     private Response returnResponse;
+    private boolean regFlag = false;
+    private boolean authFlag = false;
+    private String authResponse;
 
     int port;
     SocketAddress socketAddress;
@@ -29,6 +31,18 @@ public class NetworkConnection {
         host = InetAddress.getByName(address);
         this.socketAddress = new InetSocketAddress(host, port);
         selector = Selector.open();
+    }
+
+    public boolean isRegFlag() {
+        return regFlag;
+    }
+
+    public boolean isAuthFlag() {
+        return authFlag;
+    }
+
+    public String getAuthResponse() {
+        return authResponse;
     }
 
     public void connectionManage(Request request) throws Exception {
@@ -74,16 +88,41 @@ public class NetworkConnection {
                     socketChannel.read(buf);
 
 
-
                     ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data);
                     ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
 
                     try {
 
                         Response response = (Response) objectInputStream.readObject();
-//                        returnResponse = response;
-                        System.out.println(response.getOutput());
-                    } catch (java.io.EOFException e){
+                        if (response.getOutput().split(" ")[0].equals("!<>!")){
+                            int condition = Integer.parseInt(response.getOutput().split(" ")[1]);
+                            if (condition == 0){
+                                System.out.println("Регистрация прошла успешно");
+                                regFlag = true;
+                                authFlag = true;
+                            }
+                            if (condition == 1){
+                                System.out.println("Такой пользователь уже есть");
+                            }
+                            if (condition == 2){
+                                System.out.println("Авторизация прошла успешно");
+                                regFlag = true;
+                                authFlag = true;
+                            }
+                            if (condition == 3){
+                                System.out.println("Неверный пароль");
+                            }
+                            if (condition == 4){
+                                System.out.println("Нет такого пользователя");
+                            }
+                        }else {
+                            System.out.println(response.getOutput());
+                        }
+
+
+
+
+                    } catch (java.io.EOFException e) {
                         System.out.println("Слишком большие данные для маленького клиента");
                     }
                     buf.clear();

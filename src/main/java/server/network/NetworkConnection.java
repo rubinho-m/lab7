@@ -12,6 +12,8 @@ import org.apache.logging.log4j.Logger;
 import server.Server;
 import server.collectionManagement.CollectionManager;
 import server.collectionManagement.CommandExecutor;
+import server.databaseManagement.DatabaseHandler;
+import server.databaseManagement.DatabaseParser;
 
 import java.io.*;
 import java.net.*;
@@ -37,12 +39,16 @@ public class NetworkConnection {
     private CommandExecutor commandExecutor;
     private Request request;
     private Response response;
+    private DatabaseParser dbParser;
+    private DatabaseHandler dbHandler;
     private static final Logger logger = LogManager.getLogger(NetworkConnection.class);
 
-    public NetworkConnection(int port, CollectionManager collectionManager, CommandExecutor commandExecutor) throws IOException {
+    public NetworkConnection(int port, CollectionManager collectionManager, CommandExecutor commandExecutor, DatabaseParser dbParser, DatabaseHandler dbHandler) throws IOException {
         this.port = port;
         this.collectionManager = collectionManager;
         this.commandExecutor = commandExecutor;
+        this.dbHandler = dbHandler;
+        this.dbParser = dbParser;
 
     }
 
@@ -74,7 +80,7 @@ public class NetworkConnection {
                 }
             }
         });
-        Reader reader = new Reader(serverSocket, commandExecutor);
+        Reader reader = new Reader(serverSocket, commandExecutor, dbParser, dbHandler);
         reader.read();
 
 

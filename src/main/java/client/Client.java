@@ -42,17 +42,20 @@ public class Client {
             NetworkConnection networkConnection = new NetworkConnection(args[0], port);
 
             Authentication authentication = new Authentication();
-            authentication.chooseFunction();
-
-            String login = authentication.getLogin();
-            String password = authentication.getPassword();
             ArrayList<String> userData = new ArrayList<>();
-            userData.add(login);
-            userData.add(password);
 
-            Request authRequest = authentication.getRequest();
+            while (!networkConnection.isRegFlag() & !networkConnection.isAuthFlag()) {
+                authentication.chooseFunction();
 
-            networkConnection.connectionManage(authRequest);
+                String login = authentication.getLogin();
+                String password = authentication.getPassword();
+                userData = new ArrayList<>();
+                userData.add(login);
+                userData.add(password);
+
+                Request authRequest = authentication.getRequest();
+                networkConnection.connectionManage(authRequest);
+            }
 
             while (true) {
                 try {

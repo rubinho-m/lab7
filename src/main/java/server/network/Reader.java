@@ -1,41 +1,38 @@
 package server.network;
 
-import common.commandParsing.CommandParser;
 import common.dataStructures.ParsedString;
-import common.exceptions.NoCommandException;
-import common.exceptions.WrongCommandFormat;
 import common.networkStructures.Request;
 import common.networkStructures.Response;
 import common.structureClasses.Ticket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import server.collectionManagement.CommandExecutor;
-import sun.misc.SignalHandler;
-import sun.misc.Signal;
+import server.databaseManagement.DatabaseHandler;
+import server.databaseManagement.DatabaseParser;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketTimeoutException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class Reader {
     private ServerSocket serverSocket;
     private CommandExecutor commandExecutor;
-    private boolean ctrlPressed = false;
+    private DatabaseParser dbParser;
+    private DatabaseHandler dbHandler;
     private Set<String> serverCommands = new HashSet<>() {{
         add("save");
         add("exit");
     }};
     private static final Logger logger = LogManager.getLogger(Reader.class);
 
-    public Reader(ServerSocket serverSocket, CommandExecutor commandExecutor) {
+    public Reader(ServerSocket serverSocket, CommandExecutor commandExecutor, DatabaseParser dbParser, DatabaseHandler dbHandler) {
         this.serverSocket = serverSocket;
         this.commandExecutor = commandExecutor;
+        this.dbParser = dbParser;
+        this.dbHandler = dbHandler;
     }
 
     public void read() throws Exception {
@@ -60,17 +57,19 @@ public class Reader {
                         while (true) {
                             Request request = (Request) objectInputStream.readObject();
                             ArrayList<String> commandWithArguments = request.getCommandWithArguments();
+                            final String header = "!<>!";
 
-                            if (commandWithArguments.get(0).equals("reg") | commandWithArguments.get(0).equals("auth")){
+                            if (commandWithArguments.get(0).equals("reg") | commandWithArguments.get(0).equals("auth")) {
                                 ArrayList<String> userData = request.getUserData();
-                                String type;
-                                if (commandWithArguments.get(0).equals("reg")){
-                                    type = "Регистрация";
+                                Response response = null;
+                                if (commandWithArguments.get(0).equals("reg")) {
+                                    int condition = dbHandler.register(userData.get(0), userData.get(1));
+                                    response = new Response(header + " " + condition);
                                 } else {
-                                    type = "Авторизация";
+                                    int condition = dbHandler.auth(userData.get(0), userData.get(1));
+                                    response = new Response(header + " " + condition);
                                 }
                                 Writer writer = new Writer(outputStream);
-                                Response response = new Response(type + " прошла успешно");
                                 writer.write(response);
                                 System.out.println(userData.get(0) + " " + userData.get(1));
                             } else {
@@ -95,10 +94,9 @@ public class Reader {
                     }
                 });
 
-            } catch (Exception ignored){
+            } catch (Exception ignored) {
 
             }
-
 
 
         }
