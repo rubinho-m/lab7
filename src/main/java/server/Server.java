@@ -1,23 +1,19 @@
 package server;
 
-import common.exceptions.NoCommandException;
-import common.exceptions.WrongCommandFormat;
 import common.exceptions.XMLTroubleException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import server.collectionManagement.CollectionManager;
 import server.collectionManagement.CommandExecutor;
 import server.databaseManagement.DatabaseHandler;
-import server.databaseManagement.DatabaseManager;
 import server.databaseManagement.DatabaseParser;
+import server.databaseManagement.DatabaseManager;
 import server.network.NetworkConnection;
-import server.xml.TicketXMLParser;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.net.BindException;
 import java.net.SocketException;
-import java.sql.Connection;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -67,11 +63,12 @@ public class Server {
             databaseManager.connect();
             DatabaseParser dbParser = new DatabaseParser(databaseManager.getConnection());
             DatabaseHandler dbHandler = new DatabaseHandler(databaseManager.getConnection());
-//            collectionManager.setCollection(dbParser.parse());
+            collectionManager.setCollection(dbParser.loadCollection());
+//            collectionManager.printCollection();
 
-            TicketXMLParser xmlParser = new TicketXMLParser(args[0]);
-            collectionManager.setCollection(xmlParser.parse());
-            logger.info("XML FILE HAS BEEN PARSED");
+//            TicketXMLParser xmlParser = new TicketXMLParser(args[0]);
+//            collectionManager.setCollection(xmlParser.parse());
+//            logger.info("XML FILE HAS BEEN PARSED");
             collectionManager.setPath(args[0]);
             CommandExecutor commandExecutor = new CommandExecutor();
             commandExecutor.setCommands(collectionManager);

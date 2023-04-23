@@ -63,6 +63,20 @@ public class Ticket implements Comparable<Ticket>, Serializable {
     @XmlElement(name = "venue")
     private volatile Venue venue;
 
+    private volatile String user;
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
     /**
      * Sets the id value of the ticket.
      *

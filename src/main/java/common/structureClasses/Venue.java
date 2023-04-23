@@ -100,6 +100,10 @@ public class Venue implements Comparable<Venue>, Serializable {
         return type;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     /**
      * Sets the type of the venue
      *
