@@ -10,6 +10,7 @@ package common.commandParsing;
 import common.exceptions.WrongScriptException;
 import common.structureClasses.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
@@ -212,6 +213,7 @@ public class CollectionInput {
         if (inputVenue) {
             newTicket.setVenue(getVenue());
         }
+        newTicket.setCreationDate(LocalDate.now());
         return newTicket;
     }
 

@@ -8,9 +8,11 @@
 package common.commands;
 
 import common.networkStructures.Response;
+import common.structureClasses.Ticket;
 import server.collectionManagement.CollectionManager;
 import server.databaseManagement.DatabaseHandler;
 
+import java.sql.SQLException;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class AddCommand extends CommandTemplate implements CommandWithResponse {
@@ -19,9 +21,12 @@ public class AddCommand extends CommandTemplate implements CommandWithResponse {
     }
 
     @Override
-    public void execute() {
+    public void execute() throws SQLException {
 //        ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 //        lock.writeLock().lock();
+
+        getTicket().setUser(getUser());
+        getTicket().setId((long) getDbHandler().addTicket(getTicket()));
         getCollectionManager().addToCollection(getTicket());
 //        lock.writeLock().unlock();
     }

@@ -72,6 +72,7 @@ public class Server {
             collectionManager.setPath(args[0]);
             CommandExecutor commandExecutor = new CommandExecutor();
             commandExecutor.setDbHandler(dbHandler);
+            commandExecutor.setDbParser(dbParser);
             commandExecutor.setCommands(collectionManager);
             NetworkConnection networkConnection = new NetworkConnection(port, collectionManager, commandExecutor, dbParser, dbHandler);
             networkConnection.start();

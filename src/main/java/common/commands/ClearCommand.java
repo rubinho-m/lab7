@@ -11,6 +11,7 @@ import common.networkStructures.Response;
 import server.collectionManagement.CollectionManager;
 import server.databaseManagement.DatabaseHandler;
 
+import java.sql.SQLException;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class ClearCommand extends CommandTemplate implements CommandWithResponse{
@@ -19,12 +20,13 @@ public class ClearCommand extends CommandTemplate implements CommandWithResponse
         super(collectionManager, dbHandler);
     }
     @Override
-    public void execute() {
-        getCollectionManager().getCollection().clear();
-        getCollectionManager().resetId();
+    public void execute() throws SQLException {
+        getDbHandler().deleteTickets(getUser());
+        getCollectionManager().setCollection(getDbParser().loadCollection());
         output = new StringBuilder();
-        output.append("Now collection is empty");
+        output.append("User's tickets have been deleted");
     }
+
 
     @Override
     public Response getCommandResponse() {

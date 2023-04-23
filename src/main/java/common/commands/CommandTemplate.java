@@ -8,12 +8,39 @@ package common.commands;
 import server.collectionManagement.CollectionManager;
 import common.structureClasses.Ticket;
 import server.databaseManagement.DatabaseHandler;
+import server.databaseManagement.DatabaseParser;
 
 public class CommandTemplate {
     private CollectionManager collectionManager;
     private DatabaseHandler dbHandler;
+    private DatabaseParser dbParser;
     private String arg;
     private Ticket ticket;
+    private String user;
+
+    public DatabaseParser getDbParser() {
+        return dbParser;
+    }
+
+    public void setDbParser(DatabaseParser dbParser) {
+        this.dbParser = dbParser;
+    }
+
+    public DatabaseHandler getDbHandler() {
+        return dbHandler;
+    }
+
+    public void setDbHandler(DatabaseHandler dbHandler) {
+        this.dbHandler = dbHandler;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
 
     public String getArg() {
         return arg;
@@ -26,6 +53,7 @@ public class CommandTemplate {
     public Ticket getTicket() {
         return ticket;
     }
+
 
     public void setTicket(Ticket ticket) {
         this.ticket = ticket;

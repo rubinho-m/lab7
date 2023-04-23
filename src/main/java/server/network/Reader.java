@@ -22,6 +22,8 @@ public class Reader {
     private CommandExecutor commandExecutor;
     private DatabaseParser dbParser;
     private DatabaseHandler dbHandler;
+
+
     private Set<String> serverCommands = new HashSet<>() {{
         add("save");
         add("exit");
@@ -78,6 +80,7 @@ public class Reader {
                                 System.out.println(userData.get(0) + " " + userData.get(1));
                                 ParsedString<ArrayList<String>, Ticket> parsedString = new ParsedString<>(commandWithArguments, ticket);
                                 logger.info("REQUEST HAS BEEN PARSED");
+                                commandExecutor.setUser(userData.get(0));
 
                                 Handler handler = new Handler(commandExecutor, outputStream, false);
                                 handler.handleCommand(parsedString);

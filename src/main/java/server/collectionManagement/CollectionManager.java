@@ -69,12 +69,12 @@ public class CollectionManager {
     }
 
     public void addToCollection(Ticket ticket) {
-        ticket.setId(Ticket.getLastId() + 1);
-        if (ticket.getVenue() != null) {
-            ticket.getVenue().setId((int) ticket.getId());
-        }
-        Ticket.increaseId();
-        ticket.setCreationDate(LocalDate.now());
+//        ticket.setId(Ticket.getLastId() + 1);
+//        if (ticket.getVenue() != null) {
+//            ticket.getVenue().setId((int) ticket.getId());
+//        }
+//        Ticket.increaseId();
+//        ticket.setCreationDate(LocalDate.now());
         tickets.add(ticket);
     }
 

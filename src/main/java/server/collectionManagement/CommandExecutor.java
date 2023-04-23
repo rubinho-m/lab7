@@ -11,6 +11,7 @@ import common.exceptions.WrongScriptException;
 import common.networkStructures.Response;
 import common.structureClasses.Ticket;
 import server.databaseManagement.DatabaseHandler;
+import server.databaseManagement.DatabaseParser;
 
 import java.net.Socket;
 import java.util.*;
@@ -22,8 +23,23 @@ import static java.lang.Thread.sleep;
 public class CommandExecutor {
     private static final HashMap<String, CommandWithResponse> commandMap = new HashMap<>();
     private DatabaseHandler dbHandler;
+    private DatabaseParser dbParser;
     private Set<String> paths = new HashSet<>();
     private int BUFFER_SIZE = 512 * 512;
+    private String user;
+
+    public DatabaseParser getDbParser() {
+        return dbParser;
+    }
+
+    public void setDbParser(DatabaseParser dbParser) {
+        this.dbParser = dbParser;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
     ReadWriteLock lock = new ReentrantReadWriteLock();
 
     public Set<String> getPaths() {
@@ -117,6 +133,9 @@ public class CommandExecutor {
 
 
             command.setArg(arg);
+            command.setUser(user);
+            command.setDbHandler(dbHandler);
+            command.setDbParser(dbParser);
             command.setTicket(inputTicket);
             HistoryManager.addToHistory(commandWithArgs.get(0));
             command.execute();

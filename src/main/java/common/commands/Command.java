@@ -8,6 +8,8 @@ package common.commands;
 
 import common.exceptions.EmptyCollectionException;
 import common.structureClasses.Ticket;
+import server.databaseManagement.DatabaseHandler;
+import server.databaseManagement.DatabaseParser;
 
 public interface Command {
     /**
@@ -45,5 +47,16 @@ public interface Command {
      * @param ticket the ticket on which the command should be executed.
      */
     void setTicket(Ticket ticket);
+
+    void setUser(String user);
+
+    String getUser();
+
+    DatabaseHandler getDbHandler();
+
+    void setDbHandler(DatabaseHandler dbHandler);
+    void setDbParser(DatabaseParser dbParser);
+
+    DatabaseParser getDbParser();
 
 }

@@ -24,6 +24,14 @@ public class Coordinates implements Serializable, Comparable<Coordinates> {
     @XmlElement(name = "y")
     private int y;
 
+    public float getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
     /**
      * Sets the x coordinate of the point.
      *

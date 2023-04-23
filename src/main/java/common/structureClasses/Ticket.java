@@ -73,6 +73,7 @@ public class Ticket implements Comparable<Ticket>, Serializable {
         return user;
     }
 
+
     public void setUser(String user) {
         this.user = user;
     }
