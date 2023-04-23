@@ -20,8 +20,8 @@ import java.util.concurrent.Executors;
 public class Reader {
     private ServerSocket serverSocket;
     private CommandExecutor commandExecutor;
-    private DatabaseParser dbParser;
-    private DatabaseHandler dbHandler;
+    private volatile DatabaseParser dbParser;
+    private volatile DatabaseHandler dbHandler;
 
 
     private Set<String> serverCommands = new HashSet<>() {{
@@ -73,16 +73,16 @@ public class Reader {
                                 }
                                 Writer writer = new Writer(outputStream);
                                 writer.write(response);
-                                System.out.println(userData.get(0) + " " + userData.get(1));
                             } else {
                                 Ticket ticket = (Ticket) request.getTicket();
                                 ArrayList<String> userData = request.getUserData();
-                                System.out.println(userData.get(0) + " " + userData.get(1));
+
+//                                System.out.println(userData.get(0) + " " + userData.get(1));
                                 ParsedString<ArrayList<String>, Ticket> parsedString = new ParsedString<>(commandWithArguments, ticket);
                                 logger.info("REQUEST HAS BEEN PARSED");
-                                commandExecutor.setUser(userData.get(0));
+//                                commandExecutor.setUser(userData.get(0));
 
-                                Handler handler = new Handler(commandExecutor, outputStream, false);
+                                Handler handler = new Handler(commandExecutor, outputStream, false, userData.get(0));
                                 handler.handleCommand(parsedString);
                             }
                         }

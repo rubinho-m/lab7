@@ -22,23 +22,23 @@ import static java.lang.Thread.sleep;
 
 public class CommandExecutor {
     private static final HashMap<String, CommandWithResponse> commandMap = new HashMap<>();
-    private DatabaseHandler dbHandler;
-    private DatabaseParser dbParser;
+    private volatile DatabaseHandler dbHandler;
+    private volatile DatabaseParser dbParser;
     private Set<String> paths = new HashSet<>();
     private int BUFFER_SIZE = 512 * 512;
-    private String user;
+//    private volatile String user;
 
-    public DatabaseParser getDbParser() {
+    public synchronized DatabaseParser getDbParser() {
         return dbParser;
     }
 
-    public void setDbParser(DatabaseParser dbParser) {
+    public synchronized void setDbParser(DatabaseParser dbParser) {
         this.dbParser = dbParser;
     }
 
-    public void setUser(String user) {
-        this.user = user;
-    }
+//    public synchronized void setUser(String user) {
+//        this.user = user;
+//    }
 
     ReadWriteLock lock = new ReentrantReadWriteLock();
 
@@ -46,7 +46,7 @@ public class CommandExecutor {
         return paths;
     }
 
-    public void setDbHandler(DatabaseHandler dbHandler) {
+    public synchronized void setDbHandler(DatabaseHandler dbHandler) {
         this.dbHandler = dbHandler;
     }
 
@@ -67,6 +67,14 @@ public class CommandExecutor {
         add("update");
         add("add_if_min");
         add("remove_greater");
+    }};
+    private final Set<String> userCommands = new HashSet<>() {{
+       add("add");
+       add("remove_by_id");
+       add("clear");
+       add("add_if_min");
+       add("update");
+       add("remove_greater");
     }};
 
     private final Set<String> writeLockCommands = new HashSet<>() {{
@@ -111,7 +119,7 @@ public class CommandExecutor {
 //        commandMap.put("execute_script", new ExecuteScriptCommand(collectionManager));
     }
 
-    public Response execute(ParsedString<ArrayList<String>, Ticket> parsedString) throws Exception {
+    public Response execute(ParsedString<ArrayList<String>, Ticket> parsedString, String user) throws Exception {
 
         try {
 
@@ -133,12 +141,11 @@ public class CommandExecutor {
 
 
             command.setArg(arg);
-            command.setUser(user);
             command.setDbHandler(dbHandler);
             command.setDbParser(dbParser);
             command.setTicket(inputTicket);
             HistoryManager.addToHistory(commandWithArgs.get(0));
-            command.execute();
+            command.execute(user);
 
 
             try {

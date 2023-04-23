@@ -19,7 +19,6 @@ import java.util.Scanner;
 
 
 public class Server {
-
     private static final Logger logger = LogManager.getLogger(Server.class);
 
     public static void main(String[] args) throws Exception {

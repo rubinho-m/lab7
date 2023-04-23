@@ -23,7 +23,7 @@ public class MinByPriceCommand extends CommandTemplate implements CommandWithRes
     }
 
     @Override
-    public void execute() throws EmptyCollectionException {
+    public void execute(String user) throws EmptyCollectionException {
         Set<Ticket> tickets = getCollectionManager().getCollection();
         output = new StringBuilder();
         if (tickets.size() == 0){

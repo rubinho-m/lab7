@@ -21,7 +21,7 @@ public class SaveCommand extends CommandTemplate implements CommandWithResponse 
     }
 
     @Override
-    public void execute() {
+    public void execute(String user) {
         try {
             TicketXMLWriter writer = new TicketXMLWriter(getCollectionManager().getPath());
             writer.save(getCollectionManager());

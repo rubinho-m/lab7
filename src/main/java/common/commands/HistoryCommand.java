@@ -21,7 +21,7 @@ public class HistoryCommand extends CommandTemplate implements CommandWithRespon
     }
 
     @Override
-    public void execute() throws EmptyHistoryException {
+    public void execute(String user) throws EmptyHistoryException {
         List<String> history = HistoryManager.getHistoryCommands();
         if (history.size() == 0){
             throw new EmptyHistoryException();

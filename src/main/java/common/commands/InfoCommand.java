@@ -20,7 +20,7 @@ public class InfoCommand extends CommandTemplate implements CommandWithResponse 
     }
 
     @Override
-    public void execute() {
+    public void execute(String user) {
         try {
             output = new StringBuilder();
             CollectionManager collection = getCollectionManager();

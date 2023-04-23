@@ -18,12 +18,14 @@ public class Handler {
     CommandExecutor commandExecutor;
     OutputStream outputStream;
     private boolean isServerCommand;
+    private String user;
     private static final Logger logger = LogManager.getLogger(Handler.class);
 
-    public Handler(CommandExecutor commandExecutor, OutputStream outputStream, boolean isServerCommand) {
+    public Handler(CommandExecutor commandExecutor, OutputStream outputStream, boolean isServerCommand, String user) {
         this.commandExecutor = commandExecutor;
         this.outputStream = outputStream;
         this.isServerCommand = isServerCommand;
+        this.user = user;
     }
 
     public Handler(CommandExecutor commandExecutor, boolean isServerCommand) {
@@ -33,7 +35,7 @@ public class Handler {
 
     public void handleCommand(ParsedString<ArrayList<String>, Ticket> parsedString) throws Exception {
         ExecutorService executor = Executors.newCachedThreadPool();
-        Future<Response> futureResponse = executor.submit(() -> commandExecutor.execute(parsedString));
+        Future<Response> futureResponse = executor.submit(() -> commandExecutor.execute(parsedString, user));
 //        Response response = commandExecutor.execute(parsedString);
         logger.info("COMMAND HAS BEEN EXECUTED");
 //        if (!parsedString.getArray().get(0).equals("save")) {

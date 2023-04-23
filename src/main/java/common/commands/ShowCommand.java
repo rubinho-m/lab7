@@ -20,7 +20,7 @@ public class ShowCommand extends CommandTemplate implements CommandWithResponse{
     }
 
     @Override
-    public void execute() throws EmptyCollectionException {
+    public void execute(String user) throws EmptyCollectionException {
         if (getCollectionManager().getCollection().size() == 0){
             output = new StringBuilder();
             output.append("Collection is empty, please add ticket");

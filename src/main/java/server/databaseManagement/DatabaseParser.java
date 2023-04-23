@@ -17,7 +17,7 @@ public class DatabaseParser {
         this.connection = connection;
     }
 
-    public Set<Ticket> loadCollection() throws SQLException {
+    public synchronized Set<Ticket> loadCollection() throws SQLException {
         final String LOAD_REQUEST = "SELECT t.id, t.localdate, t.name, t.x_coord, t.y_coord, t.price, t.comment," +
                 " t.refundable, t.ticket_type, v.id, v.name, v.capacity, v.venue_type, a.id, a.street, u.login\n" +
                 "FROM tickets t LEFT JOIN venues v ON t.venue = v.id\n" +

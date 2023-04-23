@@ -16,7 +16,7 @@ import server.network.Reader;
 public class ExitCommand extends CommandTemplate implements CommandWithResponse {
     private static final Logger logger = LogManager.getLogger(ExitCommand.class);
     @Override
-    public void execute() {
+    public void execute(String user) {
         logger.info("EXIT SERVER");
         System.exit(0);
     }

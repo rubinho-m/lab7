@@ -21,7 +21,7 @@ public class DatabaseManager {
     }
 
 
-    public void connect() {
+    public  void connect() {
         try {
             connection = DriverManager.getConnection(url, login, password);
         } catch (SQLException e) {

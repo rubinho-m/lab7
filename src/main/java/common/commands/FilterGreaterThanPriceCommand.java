@@ -22,7 +22,7 @@ public class FilterGreaterThanPriceCommand extends CommandTemplate implements Co
     }
 
     @Override
-    public void execute() {
+    public void execute(String user) {
         Set<Ticket> tickets = getCollectionManager().getCollection();
         output = new StringBuilder();
         String result = tickets.stream()

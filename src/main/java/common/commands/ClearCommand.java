@@ -20,8 +20,8 @@ public class ClearCommand extends CommandTemplate implements CommandWithResponse
         super(collectionManager, dbHandler);
     }
     @Override
-    public void execute() throws SQLException {
-        getDbHandler().deleteTickets(getUser());
+    public void execute(String user) throws SQLException {
+        getDbHandler().deleteTickets(user);
         getCollectionManager().setCollection(getDbParser().loadCollection());
         output = new StringBuilder();
         output.append("User's tickets have been deleted");

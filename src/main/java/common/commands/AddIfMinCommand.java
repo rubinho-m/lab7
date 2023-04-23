@@ -26,7 +26,7 @@ public class AddIfMinCommand extends CommandTemplate implements CommandWithRespo
     }
 
     @Override
-    public void execute() throws Exception {
+    public void execute(String user) throws Exception {
         Ticket ticketToAdd = getTicket();
         Set<Ticket> tickets = getCollectionManager().getCollection();
         if (tickets.size() == 0){
@@ -38,7 +38,7 @@ public class AddIfMinCommand extends CommandTemplate implements CommandWithRespo
         if (ticketToAdd.compareTo(minTicket) < 0){
             Command addCommand = CommandExecutor.getCommandMap().get("add");
             addCommand.setTicket(ticketToAdd);
-            addCommand.execute();
+            addCommand.execute(user);
         }
 
 

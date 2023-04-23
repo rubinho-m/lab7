@@ -12,7 +12,7 @@ import common.networkStructures.Response;
 public class HelpCommand extends CommandTemplate implements CommandWithResponse{
     private StringBuilder output;
     @Override
-    public void execute() {
+    public void execute(String user) {
         output = new StringBuilder();
         output.append("Help on available commands: " + "\n" +
                 "help: display help on available commands" + "\n" +

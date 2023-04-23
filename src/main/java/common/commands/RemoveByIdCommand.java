@@ -13,6 +13,7 @@ import common.structureClasses.Ticket;
 import server.collectionManagement.CollectionManager;
 import server.databaseManagement.DatabaseHandler;
 
+import java.sql.SQLException;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class RemoveByIdCommand extends CommandTemplate implements CommandWithResponse{
@@ -22,7 +23,7 @@ public class RemoveByIdCommand extends CommandTemplate implements CommandWithRes
     }
 
     @Override
-    public void execute() throws EmptyCollectionException {
+    public void execute(String user) throws EmptyCollectionException, SQLException {
         CollectionManager collectionManager = getCollectionManager();
         if (collectionManager.getCollection().size() == 0){
             output = "Collection is empty, please add ticket";
@@ -31,6 +32,7 @@ public class RemoveByIdCommand extends CommandTemplate implements CommandWithRes
         }
         for (Ticket ticketToRemove : collectionManager.getCollection()){
             if (ticketToRemove.getId() == Integer.parseInt(getArg())){
+                getDbHandler().removeTicket(user, (int) ticketToRemove.getId());
                 collectionManager.getCollection().remove(ticketToRemove);
                 break;
             }

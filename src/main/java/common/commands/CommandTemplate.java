@@ -11,51 +11,51 @@ import server.databaseManagement.DatabaseHandler;
 import server.databaseManagement.DatabaseParser;
 
 public class CommandTemplate {
-    private CollectionManager collectionManager;
-    private DatabaseHandler dbHandler;
-    private DatabaseParser dbParser;
-    private String arg;
-    private Ticket ticket;
-    private String user;
+    private volatile CollectionManager collectionManager;
+    private volatile DatabaseHandler dbHandler;
+    private volatile DatabaseParser dbParser;
+    private volatile String arg;
+    private volatile Ticket ticket;
+    private volatile String user;
 
-    public DatabaseParser getDbParser() {
+    public synchronized DatabaseParser getDbParser() {
         return dbParser;
     }
 
-    public void setDbParser(DatabaseParser dbParser) {
+    public synchronized void setDbParser(DatabaseParser dbParser) {
         this.dbParser = dbParser;
     }
 
-    public DatabaseHandler getDbHandler() {
+    public synchronized DatabaseHandler getDbHandler() {
         return dbHandler;
     }
 
-    public void setDbHandler(DatabaseHandler dbHandler) {
+    public synchronized void setDbHandler(DatabaseHandler dbHandler) {
         this.dbHandler = dbHandler;
     }
 
-    public String getUser() {
+    public synchronized String getUser() {
         return user;
     }
 
-    public void setUser(String user) {
+    public synchronized void setUser(String user) {
         this.user = user;
     }
 
-    public String getArg() {
+    public synchronized String getArg() {
         return arg;
     }
 
-    public void setArg(String arg) {
+    public synchronized void setArg(String arg) {
         this.arg = arg;
     }
 
-    public Ticket getTicket() {
+    public synchronized Ticket getTicket() {
         return ticket;
     }
 
 
-    public void setTicket(Ticket ticket) {
+    public synchronized void setTicket(Ticket ticket) {
         this.ticket = ticket;
     }
 
@@ -72,7 +72,7 @@ public class CommandTemplate {
     }
 
 
-    public CollectionManager getCollectionManager() {
+    public synchronized CollectionManager getCollectionManager() {
         return collectionManager;
     }
 

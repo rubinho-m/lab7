@@ -18,7 +18,7 @@ public interface Command {
      * @throws EmptyCollectionException if the ticket collection is empty and the command requires a non-empty collection.
      * @throws Exception                if there is an error executing the command.
      */
-    void execute() throws Exception;
+    void execute(String user) throws Exception;
 
     /**
      * Gets the argument for the command.
@@ -48,9 +48,9 @@ public interface Command {
      */
     void setTicket(Ticket ticket);
 
-    void setUser(String user);
-
-    String getUser();
+//    void setUser(String user);
+//
+//    String getUser();
 
     DatabaseHandler getDbHandler();
 

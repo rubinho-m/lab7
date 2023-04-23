@@ -24,7 +24,7 @@ public class PrintFieldDescendingVenueCommand extends CommandTemplate implements
     }
 
     @Override
-    public void execute() throws EmptyCollectionException {
+    public void execute(String user) throws EmptyCollectionException {
         try {
 
             output = new StringBuilder();

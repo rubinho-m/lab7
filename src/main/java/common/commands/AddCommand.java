@@ -21,11 +21,12 @@ public class AddCommand extends CommandTemplate implements CommandWithResponse {
     }
 
     @Override
-    public void execute() throws SQLException {
+    public void execute(String user) throws SQLException {
 //        ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 //        lock.writeLock().lock();
 
-        getTicket().setUser(getUser());
+        getTicket().setUser(user);
+        System.out.println(user);
         getTicket().setId((long) getDbHandler().addTicket(getTicket()));
         getCollectionManager().addToCollection(getTicket());
 //        lock.writeLock().unlock();

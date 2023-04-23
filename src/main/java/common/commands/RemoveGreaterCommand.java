@@ -13,6 +13,7 @@ import common.structureClasses.Ticket;
 import server.collectionManagement.CollectionManager;
 import server.databaseManagement.DatabaseHandler;
 
+import java.sql.SQLException;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -26,13 +27,18 @@ public class RemoveGreaterCommand extends CommandTemplate implements CommandWith
     }
 
     @Override
-    public void execute() throws EmptyCollectionException {
+    public void execute(String user) throws EmptyCollectionException, SQLException {
         Set<Ticket> tickets = getCollectionManager().getCollection();
         output = new StringBuilder();
         if (tickets.size() == 0) {
             output.append("Collection is empty, please add ticket");
         } else {
             output.append("Removed");
+        }
+        for (Ticket ticket: tickets){
+            if (ticket.compareTo(getTicket()) > 0){
+                getDbHandler().removeTicket(user, (int) ticket.getId());
+            }
         }
         getCollectionManager().setCollection(tickets.stream().
                 filter(ticket -> ticket.compareTo(getTicket()) <= 0).
