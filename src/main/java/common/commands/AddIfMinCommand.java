@@ -12,6 +12,7 @@ import server.collectionManagement.CollectionManager;
 import server.collectionManagement.CommandExecutor;
 import common.exceptions.EmptyCollectionException;
 import common.structureClasses.Ticket;
+import server.databaseManagement.DatabaseHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,8 +21,8 @@ import java.util.Set;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class AddIfMinCommand extends CommandTemplate implements CommandWithResponse{
-    public AddIfMinCommand(CollectionManager collectionManager) {
-        super(collectionManager);
+    public AddIfMinCommand(CollectionManager collectionManager, DatabaseHandler dbHandler) {
+        super(collectionManager, dbHandler);
     }
 
     @Override

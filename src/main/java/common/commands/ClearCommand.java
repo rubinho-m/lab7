@@ -9,13 +9,14 @@ package common.commands;
 
 import common.networkStructures.Response;
 import server.collectionManagement.CollectionManager;
+import server.databaseManagement.DatabaseHandler;
 
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class ClearCommand extends CommandTemplate implements CommandWithResponse{
     private StringBuilder output;
-    public ClearCommand(CollectionManager collectionManager){
-        super(collectionManager);
+    public ClearCommand(CollectionManager collectionManager, DatabaseHandler dbHandler){
+        super(collectionManager, dbHandler);
     }
     @Override
     public void execute() {

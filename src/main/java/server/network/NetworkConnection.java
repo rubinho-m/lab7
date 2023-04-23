@@ -25,7 +25,6 @@ public class NetworkConnection {
     private Socket clientSocket;
     private ServerSocket serverSocket;
     private Set<String> serverCommands = new HashSet<>() {{
-        add("save");
         add("exit");
     }};
     private int port;
@@ -64,7 +63,6 @@ public class NetworkConnection {
                         Handler handler = new Handler(commandExecutor, true);
                         handler.handleCommand(parsedString);
                     } else {
-                        System.out.println("Нет такой команды");
                         logger.info("NOT SERVER COMMAND");
                     }
                 } catch (NoCommandException | WrongCommandFormat ignored) {

@@ -10,6 +10,7 @@ import common.dataStructures.ParsedString;
 import common.exceptions.WrongScriptException;
 import common.networkStructures.Response;
 import common.structureClasses.Ticket;
+import server.databaseManagement.DatabaseHandler;
 
 import java.net.Socket;
 import java.util.*;
@@ -20,12 +21,17 @@ import static java.lang.Thread.sleep;
 
 public class CommandExecutor {
     private static final HashMap<String, CommandWithResponse> commandMap = new HashMap<>();
+    private DatabaseHandler dbHandler;
     private Set<String> paths = new HashSet<>();
     private int BUFFER_SIZE = 512 * 512;
     ReadWriteLock lock = new ReentrantReadWriteLock();
 
     public Set<String> getPaths() {
         return paths;
+    }
+
+    public void setDbHandler(DatabaseHandler dbHandler) {
+        this.dbHandler = dbHandler;
     }
 
     public void clearPaths() {
@@ -54,7 +60,6 @@ public class CommandExecutor {
         add("remove_by_id");
         add("add_if_min");
         add("clear");
-        add("filter_greater_than_price");
 
 
     }};
@@ -66,23 +71,24 @@ public class CommandExecutor {
         add("help");
         add("min_by_price");
         add("print_field_descending_venue");
+        add("filter_greater_than_price");
 
 
     }};
 
     public void setCommands(CollectionManager collectionManager) {
         commandMap.put("save", new SaveCommand(collectionManager));
-        commandMap.put("add", new AddCommand(collectionManager));
+        commandMap.put("add", new AddCommand(collectionManager, dbHandler));
         commandMap.put("history", new HistoryCommand());
         commandMap.put("show", new ShowCommand(collectionManager));
         commandMap.put("info", new InfoCommand(collectionManager));
-        commandMap.put("remove_by_id", new RemoveByIdCommand(collectionManager));
-        commandMap.put("clear", new ClearCommand(collectionManager));
+        commandMap.put("remove_by_id", new RemoveByIdCommand(collectionManager, dbHandler));
+        commandMap.put("clear", new ClearCommand(collectionManager, dbHandler));
         commandMap.put("exit", new ExitCommand());
-        commandMap.put("add_if_min", new AddIfMinCommand(collectionManager));
+        commandMap.put("add_if_min", new AddIfMinCommand(collectionManager, dbHandler));
         commandMap.put("help", new HelpCommand());
-        commandMap.put("update", new UpdateCommand(collectionManager));
-        commandMap.put("remove_greater", new RemoveGreaterCommand(collectionManager));
+        commandMap.put("update", new UpdateCommand(collectionManager, dbHandler));
+        commandMap.put("remove_greater", new RemoveGreaterCommand(collectionManager, dbHandler));
         commandMap.put("min_by_price", new MinByPriceCommand(collectionManager));
         commandMap.put("filter_greater_than_price", new FilterGreaterThanPriceCommand(collectionManager));
         commandMap.put("print_field_descending_venue", new PrintFieldDescendingVenueCommand(collectionManager));
@@ -95,8 +101,7 @@ public class CommandExecutor {
 
             ArrayList<String> commandWithArgs = parsedString.getArray();
             CommandWithResponse command = commandMap.get(commandWithArgs.get(0));
-            if (writeLockCommands.contains(commandWithArgs.get(0)))
-            {
+            if (writeLockCommands.contains(commandWithArgs.get(0))) {
                 lock.writeLock().lock();
             } else if (readLockCommands.contains(commandWithArgs.get(0))) {
                 lock.readLock().lock();
@@ -121,16 +126,15 @@ public class CommandExecutor {
                 Response response = command.getCommandResponse();
                 String output = response.getOutput();
                 byte[] outputBytes = output.getBytes();
-                if (outputBytes.length > BUFFER_SIZE){
+                if (outputBytes.length > BUFFER_SIZE) {
                     String newOutput = new String(outputBytes, 0, BUFFER_SIZE);
                     response.setOutput(newOutput);
                 }
                 return response;
             } finally {
-                if (writeLockCommands.contains(commandWithArgs.get(0)))
-                {
+                if (writeLockCommands.contains(commandWithArgs.get(0))) {
                     lock.writeLock().unlock();
-                } else if (readLockCommands.contains(commandWithArgs.get(0))){
+                } else if (readLockCommands.contains(commandWithArgs.get(0))) {
                     lock.readLock().unlock();
                 }
             }

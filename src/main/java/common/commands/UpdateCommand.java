@@ -11,6 +11,7 @@ import common.exceptions.EmptyCollectionException;
 import common.networkStructures.Response;
 import common.structureClasses.Ticket;
 import server.collectionManagement.CollectionManager;
+import server.databaseManagement.DatabaseHandler;
 
 import java.util.Objects;
 import java.util.Set;
@@ -18,8 +19,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class UpdateCommand extends CommandTemplate implements CommandWithResponse{
     private String output = null;
-    public UpdateCommand(CollectionManager collectionManager) {
-        super(collectionManager);
+    public UpdateCommand(CollectionManager collectionManager, DatabaseHandler dbHandler) {
+        super(collectionManager, dbHandler);
     }
 
     @Override

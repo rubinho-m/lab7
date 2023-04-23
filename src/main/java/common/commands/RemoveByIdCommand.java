@@ -11,13 +11,14 @@ import common.exceptions.EmptyCollectionException;
 import common.networkStructures.Response;
 import common.structureClasses.Ticket;
 import server.collectionManagement.CollectionManager;
+import server.databaseManagement.DatabaseHandler;
 
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class RemoveByIdCommand extends CommandTemplate implements CommandWithResponse{
     private String output;
-    public RemoveByIdCommand(CollectionManager collectionManager) {
-        super(collectionManager);
+    public RemoveByIdCommand(CollectionManager collectionManager, DatabaseHandler dbHandler) {
+        super(collectionManager, dbHandler);
     }
 
     @Override

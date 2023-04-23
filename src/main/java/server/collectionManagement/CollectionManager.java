@@ -33,15 +33,15 @@ public class CollectionManager {
     public void setCollection(Set<Ticket> data) {
         for (Ticket ticket : data) {
             if (ticket.getName().isBlank() | ticket.getName() == null) {
-                System.out.println("In your xml file empty name, please fix it");
+                System.out.println("In your database file empty name, please fix it");
                 System.exit(1);
             }
             if (ticket.getCoordinates() == null) {
-                System.out.println("In your xml file no coords, please fix it");
+                System.out.println("In your database no coords, please fix it");
                 System.exit(1);
             }
             if (ticket.getComment() == null | ticket.getComment().isBlank()) {
-                System.out.println("In your xml file comment is empty, please fix it");
+                System.out.println("In your database file comment is empty, please fix it");
                 System.exit(1);
             }
             if (ticket.getVenue() != null) {

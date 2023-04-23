@@ -64,13 +64,14 @@ public class Server {
             DatabaseParser dbParser = new DatabaseParser(databaseManager.getConnection());
             DatabaseHandler dbHandler = new DatabaseHandler(databaseManager.getConnection());
             collectionManager.setCollection(dbParser.loadCollection());
-//            collectionManager.printCollection();
+//            System.out.println(collectionManager.printCollection());
 
 //            TicketXMLParser xmlParser = new TicketXMLParser(args[0]);
 //            collectionManager.setCollection(xmlParser.parse());
 //            logger.info("XML FILE HAS BEEN PARSED");
             collectionManager.setPath(args[0]);
             CommandExecutor commandExecutor = new CommandExecutor();
+            commandExecutor.setDbHandler(dbHandler);
             commandExecutor.setCommands(collectionManager);
             NetworkConnection networkConnection = new NetworkConnection(port, collectionManager, commandExecutor, dbParser, dbHandler);
             networkConnection.start();

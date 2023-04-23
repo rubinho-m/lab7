@@ -206,6 +206,7 @@ public class Ticket implements Comparable<Ticket>, Serializable {
                 lineOutput("name", name) +
                 lineOutput("creationDate", creationDate) +
                 lineOutput("coordinates", coordinates) +
+                lineOutput("created by", user) +
                 lineOutput("price", price) +
                 lineOutput("comment", comment) +
                 lineOutput("refundable", refundable) +

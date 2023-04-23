@@ -9,12 +9,13 @@ package common.commands;
 
 import common.networkStructures.Response;
 import server.collectionManagement.CollectionManager;
+import server.databaseManagement.DatabaseHandler;
 
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class AddCommand extends CommandTemplate implements CommandWithResponse {
-    public AddCommand(CollectionManager collectionManager) {
-        super(collectionManager);
+    public AddCommand(CollectionManager collectionManager, DatabaseHandler dbHandler) {
+        super(collectionManager, dbHandler);
     }
 
     @Override

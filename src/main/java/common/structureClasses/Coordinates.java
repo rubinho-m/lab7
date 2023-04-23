@@ -46,7 +46,7 @@ public class Coordinates implements Serializable, Comparable<Coordinates> {
     public String toString() {
         return "Coordinate object:" + "\n" +
                 "x coordinate: " + this.x + '\n' +
-                "y coordinate: " + this.y + '\n';
+                "y coordinate: " + this.y;
     }
 
     @Override

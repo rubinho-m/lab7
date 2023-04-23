@@ -11,6 +11,7 @@ import common.exceptions.EmptyCollectionException;
 import common.networkStructures.Response;
 import common.structureClasses.Ticket;
 import server.collectionManagement.CollectionManager;
+import server.databaseManagement.DatabaseHandler;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -20,8 +21,8 @@ import java.util.stream.Collectors;
 public class RemoveGreaterCommand extends CommandTemplate implements CommandWithResponse {
     private StringBuilder output;
 
-    public RemoveGreaterCommand(CollectionManager collectionManager) {
-        super(collectionManager);
+    public RemoveGreaterCommand(CollectionManager collectionManager, DatabaseHandler dbHandler) {
+        super(collectionManager, dbHandler);
     }
 
     @Override

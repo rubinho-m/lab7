@@ -7,9 +7,11 @@ package common.commands;
 
 import server.collectionManagement.CollectionManager;
 import common.structureClasses.Ticket;
+import server.databaseManagement.DatabaseHandler;
 
 public class CommandTemplate {
     private CollectionManager collectionManager;
+    private DatabaseHandler dbHandler;
     private String arg;
     private Ticket ticket;
 
@@ -29,6 +31,10 @@ public class CommandTemplate {
         this.ticket = ticket;
     }
 
+    public CommandTemplate(CollectionManager collectionManager, DatabaseHandler dbHandler) {
+        this.collectionManager = collectionManager;
+        this.dbHandler = dbHandler;
+    }
     public CommandTemplate(CollectionManager collectionManager) {
         this.collectionManager = collectionManager;
     }

@@ -36,14 +36,19 @@ public class Handler {
         Future<Response> futureResponse = executor.submit(() -> commandExecutor.execute(parsedString));
 //        Response response = commandExecutor.execute(parsedString);
         logger.info("COMMAND HAS BEEN EXECUTED");
-        if (!parsedString.getArray().get(0).equals("save")) {
-            ArrayList<String> save = new ArrayList<>();
-            save.add("save");
-            ParsedString<ArrayList<String>, Ticket> saveString = new ParsedString<>(save);
-//            Response saveResponse = commandExecutor.execute(saveString);
-            Future<Response> futureSaveResponse = executor.submit(() -> commandExecutor.execute(saveString));
+//        if (!parsedString.getArray().get(0).equals("save")) {
+//            System.out.println("AHAHAHAHA");
+//            ArrayList<String> save = new ArrayList<>();
+//            save.add("save");
+//            ParsedString<ArrayList<String>, Ticket> saveString = new ParsedString<>(save);
+////            Response saveResponse = commandExecutor.execute(saveString);
+//            Future<Response> futureSaveResponse = executor.submit(() -> commandExecutor.execute(saveString));
+//            logger.info("SAVED COLLECTION TO XML FILE");
+//        }
+        if (parsedString.getArray().get(0).equals("save")){
+            logger.info("SAVED COLLECTION");
         }
-        logger.info("SAVED COLLECTION TO XML FILE");
+
         if (!isServerCommand) {
             Writer writer = new Writer(outputStream);
             Response response = futureResponse.get();
