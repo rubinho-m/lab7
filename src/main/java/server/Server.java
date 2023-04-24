@@ -22,8 +22,8 @@ public class Server {
     private static final Logger logger = LogManager.getLogger(Server.class);
 
     public static void main(String[] args) throws Exception {
-        if (args.length != 2) {
-            System.out.println("Введите путь к файлу и порт");
+        if (args.length != 1) {
+            System.out.println("Введите порт");
             System.exit(1);
         }
 
@@ -55,7 +55,7 @@ public class Server {
         DatabaseManager databaseManager = new DatabaseManager("jdbc:postgresql://localhost:5432/studs", login, password);
 
         try {
-            int port = Integer.parseInt(args[1]);
+            int port = Integer.parseInt(args[0]);
             logger.info("START");
             CollectionManager collectionManager = new CollectionManager();
             logger.info("COLLECTION MANAGER HAS BEEN SET");
@@ -68,7 +68,7 @@ public class Server {
 //            TicketXMLParser xmlParser = new TicketXMLParser(args[0]);
 //            collectionManager.setCollection(xmlParser.parse());
 //            logger.info("XML FILE HAS BEEN PARSED");
-            collectionManager.setPath(args[0]);
+//            collectionManager.setPath(args[0]);
             CommandExecutor commandExecutor = new CommandExecutor();
             commandExecutor.setDbHandler(dbHandler);
             commandExecutor.setDbParser(dbParser);
