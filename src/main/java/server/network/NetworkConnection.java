@@ -65,7 +65,10 @@ public class NetworkConnection {
                     } else {
                         logger.info("NOT SERVER COMMAND");
                     }
-                } catch (NoCommandException | WrongCommandFormat ignored) {
+                } catch (NoSuchElementException e){
+                    System.exit(0);
+                }
+                catch (NoCommandException | WrongCommandFormat ignored) {
                     logger.error("WRONG COMMAND HAS BEEN INPUT");
                 } catch (Exception e) {
                     logger.error("ERROR WITH HANDLING COMMAND");

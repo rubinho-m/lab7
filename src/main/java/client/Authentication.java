@@ -6,6 +6,7 @@ import java.io.Console;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -37,7 +38,10 @@ public class Authentication {
                 chooseFunction();
             }
             readUserData(scanner);
-        } catch (Exception e) {
+        }catch (NoSuchElementException e){
+            System.exit(0);
+        }
+        catch (Exception e) {
             chooseFunction();
         }
 
