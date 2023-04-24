@@ -43,8 +43,11 @@ public class Writer {
                 objectOutputStream.close();
                 byteArrayOutputStream.close();
                 outputStream.close();
+                Thread.sleep(50);
             } catch (IOException e) {
                 logger.error("Failed to send response: " + e.getMessage());
+            } catch (InterruptedException ignored) {
+
             }
         });
 

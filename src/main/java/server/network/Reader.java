@@ -76,14 +76,21 @@ public class Reader {
                             } else {
                                 Ticket ticket = (Ticket) request.getTicket();
                                 ArrayList<String> userData = request.getUserData();
-
-//                                System.out.println(userData.get(0) + " " + userData.get(1));
-                                ParsedString<ArrayList<String>, Ticket> parsedString = new ParsedString<>(commandWithArguments, ticket);
-                                logger.info("REQUEST HAS BEEN PARSED");
+                                int condition = dbHandler.auth(userData.get(0), userData.get(1));
+                                if (condition != 2) {
+                                    Response response = new Response("Неверный пароль");
+                                    Writer writer = new Writer(outputStream);
+                                    writer.write(response);
+                                } else {
+                                    ParsedString<ArrayList<String>, Ticket> parsedString = new ParsedString<>(commandWithArguments, ticket);
+                                    logger.info("REQUEST HAS BEEN PARSED");
 //                                commandExecutor.setUser(userData.get(0));
 
-                                Handler handler = new Handler(commandExecutor, outputStream, false, userData.get(0));
-                                handler.handleCommand(parsedString);
+                                    Handler handler = new Handler(commandExecutor, outputStream, false, userData.get(0));
+                                    handler.handleCommand(parsedString);
+                                }
+
+
                             }
                         }
                     } catch (Exception e) {
