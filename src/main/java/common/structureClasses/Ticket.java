@@ -12,8 +12,8 @@ import java.time.LocalDate;
 
 @XmlAccessorType(XmlAccessType.NONE)
 public class Ticket implements Comparable<Ticket>, Serializable {
-    private volatile Long id;
-    private volatile static Long lastId = 0L;
+    private Long id;
+    private static Long lastId = 0L;
 
     /**
      * Returns the last assigned id value.
@@ -47,23 +47,23 @@ public class Ticket implements Comparable<Ticket>, Serializable {
         Ticket.lastId = lastId;
     }
 
-    private volatile LocalDate creationDate;
+    private LocalDate creationDate;
     @XmlElement(name = "name")
-    private volatile String name;
+    private String name;
     @XmlElement(name = "coordinates")
-    private volatile Coordinates coordinates;
+    private Coordinates coordinates;
     @XmlElement(name = "price")
-    private volatile Double price;
+    private Double price;
     @XmlElement(name = "comment")
-    private volatile String comment;
+    private String comment;
     @XmlElement(name = "refundable")
-    private volatile boolean refundable;
+    private boolean refundable;
     @XmlElement(name = "type")
-    private volatile TicketType type;
+    private TicketType type;
     @XmlElement(name = "venue")
-    private volatile Venue venue;
+    private Venue venue;
 
-    private volatile String user;
+    private String user;
 
     public void setPrice(Double price) {
         this.price = price;

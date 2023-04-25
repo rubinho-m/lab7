@@ -56,6 +56,7 @@ public class NetworkConnection {
         CommandParser commandParser = new CommandParser();
 
         executorService.submit(() -> {
+            Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
             while (true) {
                 try {
                     ParsedString<ArrayList<String>, Ticket> parsedString = commandParser.readCommand(scanner, true, true);

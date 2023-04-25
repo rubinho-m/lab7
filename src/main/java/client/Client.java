@@ -84,8 +84,10 @@ public class Client {
                     for (ParsedString<ArrayList<String>, Ticket> ps : firstToDoCommands) {
                         Request request = new Request(ps.getArray(), ps.getTicket(), userData);
                         networkConnection.connectionManage(request);
+
                     }
                 } catch (NoCommandException | WrongCommandFormat ignored) {
+
 
                 } catch (ConnectException e) {
                     System.out.println("Сервер временно недоступен");

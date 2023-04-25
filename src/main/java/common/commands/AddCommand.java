@@ -24,7 +24,6 @@ public class AddCommand extends CommandTemplate implements CommandWithResponse {
     public void execute(String user) throws SQLException {
 //        ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 //        lock.writeLock().lock();
-
         getTicket().setUser(user);
         getTicket().setId((long) getDbHandler().addTicket(getTicket()));
         getCollectionManager().addToCollection(getTicket());

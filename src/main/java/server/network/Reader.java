@@ -93,6 +93,8 @@ public class Reader {
 
                             }
                         }
+
+
                     } catch (Exception e) {
                         logger.info("Client disconnected");
                         try {
@@ -102,9 +104,14 @@ public class Reader {
                             logger.error("Failed to close client socket: " + ex.getMessage());
                         }
                     }
+
                 });
 
-            } catch (Exception ignored) {
+
+
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
 
             }
 

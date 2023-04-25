@@ -15,7 +15,7 @@ public class Address implements Serializable {
      * The street name of the address.
      */
     @XmlElement(name = "street")
-    private volatile String street;
+    private String street;
 
     /**
      * Returns the street name of the address.

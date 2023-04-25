@@ -22,17 +22,17 @@ import static java.lang.Thread.sleep;
 
 public class CommandExecutor {
     private static final HashMap<String, CommandWithResponse> commandMap = new HashMap<>();
-    private volatile DatabaseHandler dbHandler;
-    private volatile DatabaseParser dbParser;
+    private DatabaseHandler dbHandler;
+    private DatabaseParser dbParser;
     private Set<String> paths = new HashSet<>();
     private int BUFFER_SIZE = 512 * 512;
 //    private volatile String user;
 
-    public synchronized DatabaseParser getDbParser() {
+    public DatabaseParser getDbParser() {
         return dbParser;
     }
 
-    public synchronized void setDbParser(DatabaseParser dbParser) {
+    public void setDbParser(DatabaseParser dbParser) {
         this.dbParser = dbParser;
     }
 
@@ -46,7 +46,7 @@ public class CommandExecutor {
         return paths;
     }
 
-    public synchronized void setDbHandler(DatabaseHandler dbHandler) {
+    public void setDbHandler(DatabaseHandler dbHandler) {
         this.dbHandler = dbHandler;
     }
 
@@ -120,9 +120,7 @@ public class CommandExecutor {
     }
 
     public Response execute(ParsedString<ArrayList<String>, Ticket> parsedString, String user) throws Exception {
-
         try {
-
             ArrayList<String> commandWithArgs = parsedString.getArray();
             CommandWithResponse command = commandMap.get(commandWithArgs.get(0));
             if (writeLockCommands.contains(commandWithArgs.get(0))) {

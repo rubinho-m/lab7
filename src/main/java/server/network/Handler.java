@@ -36,10 +36,10 @@ public class Handler {
     public void handleCommand(ParsedString<ArrayList<String>, Ticket> parsedString) throws Exception {
         ExecutorService executor = Executors.newCachedThreadPool();
         Future<Response> futureResponse = executor.submit(() -> commandExecutor.execute(parsedString, user));
+
 //        Response response = commandExecutor.execute(parsedString);
         logger.info("COMMAND HAS BEEN EXECUTED");
 //        if (!parsedString.getArray().get(0).equals("save")) {
-//            System.out.println("AHAHAHAHA");
 //            ArrayList<String> save = new ArrayList<>();
 //            save.add("save");
 //            ParsedString<ArrayList<String>, Ticket> saveString = new ParsedString<>(save);
