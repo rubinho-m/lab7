@@ -63,6 +63,7 @@ public class NetworkConnection {
                 Iterator<SelectionKey> keyIterator = selector.selectedKeys().iterator();
                 if (!keyIterator.hasNext()) {
                     selector = Selector.open();
+                    socketChannel.close();
                     break;
                 }
                 while (keyIterator.hasNext()) {
@@ -145,6 +146,10 @@ public class NetworkConnection {
                 }
             }
         } catch (IOException | NotYetConnectedException ignored){
+            if (!socketChannel.isConnected()){
+                System.out.println("Сервер разорвал подключение");
+                System.exit(0);
+            }
 
         }
     }
