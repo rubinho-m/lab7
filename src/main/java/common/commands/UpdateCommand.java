@@ -34,7 +34,7 @@ public class UpdateCommand extends CommandTemplate implements CommandWithRespons
         for (Ticket ticketToUpdate: tickets){
             if (ticketToUpdate.getId() == Integer.parseInt(getArg())){
                 getDbHandler().removeTicket(user, (int) ticketToUpdate.getId());
-                tickets.remove(ticketToUpdate);
+                getCollectionManager().setCollection(getDbParser().loadCollection());
                 break;
             }
         }
