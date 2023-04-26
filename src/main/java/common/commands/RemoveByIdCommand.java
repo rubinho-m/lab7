@@ -32,9 +32,14 @@ public class RemoveByIdCommand extends CommandTemplate implements CommandWithRes
         }
         for (Ticket ticketToRemove : collectionManager.getCollection()){
             if (ticketToRemove.getId() == Integer.parseInt(getArg())){
-                getDbHandler().removeTicket(user, (int) ticketToRemove.getId());
-                collectionManager.getCollection().remove(ticketToRemove);
-                break;
+                int condition = getDbHandler().removeTicket(user, (int) ticketToRemove.getId());
+                if (condition == 0) {
+                    collectionManager.getCollection().remove(ticketToRemove);
+                    break;
+                } else {
+                    output = "Нет прав для удаления";
+                }
+
             }
         }
     }

@@ -53,10 +53,8 @@ public class Handler {
 
         if (!isServerCommand) {
             Writer writer = new Writer(outputStream);
-            if (futureResponse.isDone()) {
-                Response response = futureResponse.get();
-                writer.write(response);
-            }
+            Response response = futureResponse.get();
+            writer.write(response);
         }
         executor.shutdown();
     }

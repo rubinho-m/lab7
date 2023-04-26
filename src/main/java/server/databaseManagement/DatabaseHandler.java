@@ -69,13 +69,26 @@ public class DatabaseHandler {
 
     }
 
-    public synchronized void removeTicket(String user, int id) throws SQLException {
+    public synchronized int removeTicket(String user, int id) throws SQLException {
         final String REMOVE_REQUEST = "DELETE FROM tickets WHERE user_id = (SELECT id FROM users WHERE login = ?) AND id = ?;";
         try (PreparedStatement removeStatement = connection.prepareStatement(REMOVE_REQUEST)) {
             removeStatement.setString(1, user);
             removeStatement.setInt(2, id);
             removeStatement.executeUpdate();
         }
+
+        final String REMOVED_REQUEST = "SELECT * FROM tickets WHERE id = ?;";
+        try (PreparedStatement removedStatement = connection.prepareStatement(REMOVED_REQUEST)) {
+            removedStatement.setInt(1, id);
+            ResultSet resultSet = removedStatement.executeQuery();
+            System.out.println(resultSet);
+            if (resultSet.next()) {
+                return 1;
+            }
+        }
+        return 0;
+
+
     }
     public synchronized int getUserId (String user) throws SQLException {
         final String USER_REQUEST = "SELECT * FROM users WHERE login = ?;";
